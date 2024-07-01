@@ -1,6 +1,5 @@
 const axios = require('axios');
-const { buildPrompt, constructMessagesList } = require('../utils/helperFunctions');
-
+const { buildPrompt, constructMessagesList } = require('../helperFunctions.js');
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const OPENAI_EMBEDDING_MODEL = 'text-embedding-ada-002';
 const PROMPT_LIMIT = 3750;

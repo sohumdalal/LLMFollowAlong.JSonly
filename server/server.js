@@ -5,7 +5,7 @@ const EventSource = require('eventsource');
 const openAIService = require('./handlers/openAIHandler');
 const pineconeService = require('./handlers/pineconeHandler');
 const scrapingService = require('./handlers/scrapingHandler');
-const { chunkText, addCorsHeaders, handleOptionsRequest } = require('./utils/helperFunctions');
+const { chunkText, addCorsHeaders, handleOptionsRequest } = require('./helperFunctions.js');
 
 const app = express();
 const PINECONE_INDEX_NAME = 'index237';
