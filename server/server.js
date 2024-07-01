@@ -1,8 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
-const sse = require('sseclient');
-const openAIService = require('./handlers/openai_service');
+const EventSource = require('eventsource');
+const openAIService = require('./handlers/openAIHandler');
 const pineconeService = require('./handlers/pineconeHandler');
 const scrapingService = require('./handlers/scrapingHandler');
 const { chunkText, addCorsHeaders, handleOptionsRequest } = require('./utils/helperFunctions');
@@ -33,13 +33,13 @@ app.post('/api/handle-query', async (req, res) => {
     // Send to OpenAI's LLM to generate a completion
     const url = 'https://api.openai.com/v1/chat/completions';
     const response = await axios.post(url, data, { headers, responseType: 'stream' });
-    const client = new sse(response);
+    const eventSource = new EventSource(response.data);
 
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
 
-    client.on('data', (event) => {
+    eventSource.onmessage = (event) => {
         if (event.data !== '[DONE]') {
             try {
                 const text = JSON.parse(event.data).choices[0].delta.content;
@@ -51,7 +51,12 @@ app.post('/api/handle-query', async (req, res) => {
         } else {
             res.end();
         }
-    });
+    };
+
+    eventSource.onerror = (error) => {
+        console.error(`EventSource error: ${error}`);
+        res.end();
+    };
 });
 
 // POST /embed-and-store
