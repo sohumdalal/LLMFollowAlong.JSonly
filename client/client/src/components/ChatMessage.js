@@ -1,9 +1,20 @@
-import React from 'react'
+import React from 'react';
+import ReactMarkdown from 'react-markdown';
 
-const ChatMessage = () => {
+function ChatMessage({ message }) {
+  
+  // Only parse markdown for bot messages
+  const content = message.isBot ? (
+    <ReactMarkdown children={message.text} />
+  ) : (
+    message.text
+  );
+
   return (
-    <div>ChatMessage</div>
-  )
+    <div className={`chat-message ${message.isBot ? 'bot-message' : 'user-message'}`}>
+      {content}
+    </div>
+  );
 }
 
-export default ChatMessage
+export default ChatMessage;
