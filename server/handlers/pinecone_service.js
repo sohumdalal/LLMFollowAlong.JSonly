@@ -1,5 +1,5 @@
 const PineconeClient = require('@pinecone-database/pinecone-client');
-const { getEmbedding } = require('./openAIHandler');
+const { getEmbedding } = require('./openai_service.js');
 require('dotenv').config();
 
 const PINECONE_API_KEY = process.env.PINECONE_API_KEY;

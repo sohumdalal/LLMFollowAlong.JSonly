@@ -2,9 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const EventSource = require('eventsource');
-const openAIService = require('./handlers/openAIHandler');
-const pineconeService = require('./handlers/pineconeHandler');
-const scrapingService = require('./handlers/scrapingHandler');
+const openAIService = require('./handlers/openai_service.js');
+const pineconeService = require('./handlers/pinecone_service.js');
+const scrapingService = require('./handlers/scraping_service.js');
 const { chunkText, addCorsHeaders, handleOptionsRequest } = require('./helperFunctions.js');
 
 const app = express();
