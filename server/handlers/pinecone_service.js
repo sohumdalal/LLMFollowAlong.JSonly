@@ -19,13 +19,16 @@ const embedChunksAndUploadToPinecone = async (chunks, indexName) => {
 
     console.log("\nCreating a new index: ", indexName);
     await pc.createIndex({
-        indexName,
+        name: 'severless-index',
         dimension: EMBEDDING_DIMENSION,
         metric: 'cosine',
-        pods: 1,
-        replicas: 1,
-        shards: 1
-    });
+        spec: {
+          serverless: {
+            cloud: 'aws',
+            region: 'us-east-1'
+          }
+        }
+      });
 
     console.log("\nEmbedding chunks using OpenAI ...");
     const embeddingsWithIds = await Promise.all(chunks.map(async (chunk, i) => {
@@ -58,15 +61,18 @@ const getMostSimilarChunksForQuery = async (query, indexName) => {
 
 const deleteIndex = async (indexName) => {
     console.log("Deleting index: ", indexName);
-    const existingIndexes = await pc.list_indexes()
+    const existingIndexes = await pc.listIndexes();
+    console.log(existingIndexes);
 
-    if (existingIndexes.includes(indexName)) {
+    const indexExists = existingIndexes.indexes.some(index => index.name === indexName);
+    console.log(indexExists);
+
+    if (indexExists) {
         console.log("Index exists. Deleting ...");
-        await pc.deleteIndex({ indexName });
+        await pc.deleteIndex( indexName );
         console.log("Index deleted.");
     } else {
         console.log("Index not found.");
     }
 };
-
 module.exports = { embedChunksAndUploadToPinecone, getMostSimilarChunksForQuery, deleteIndex };

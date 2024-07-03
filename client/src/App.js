@@ -19,6 +19,9 @@ function App() {
           if (!response.ok) {
             console.error('Error deleting index:', response.statusText);
           }
+          else {
+            console.log("successful roundtrip post")
+          }
         })
         .catch((error) => {
           console.error('Error:', error);
