@@ -4,6 +4,8 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const OPENAI_EMBEDDING_MODEL = 'text-embedding-ada-002';
 const PROMPT_LIMIT = 3750;
 const CHATGPT_MODEL = 'gpt-4-1106-preview';
+require('dotenv').config();
+
 
 const getEmbedding = async (chunk) => {
     const url = 'https://api.openai.com/v1/embeddings';
