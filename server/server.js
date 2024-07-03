@@ -5,7 +5,7 @@ const EventSource = require('eventsource');
 const openAIService = require('./handlers/openai_service.js');
 const pineconeService = require('./handlers/pinecone_service.js');
 const scrapingService = require('./handlers/scraping_service.js');
-const { chunkText, addCorsHeaders, handleOptionsRequest } = require('./helperFunctions.js');
+const { chunkText, addCorsHeaders} = require('./helperFunctions.js');
 
 const app = express();
 const PINECONE_INDEX_NAME = 'index237';
@@ -18,7 +18,6 @@ app.use((req, res, next) => {
     next();
 });
 
-app.options('*', handleOptionsRequest);
 
 // POST /handle-query
 app.post('/api/handle-query', async (req, res) => {

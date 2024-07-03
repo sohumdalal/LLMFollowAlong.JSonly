@@ -3,6 +3,7 @@ const cheerio = require('cheerio');
 
 const scrapeWebsite = async (url) => {
     try {
+        console.log("we are scraping the website")
         const response = await axios.get(url);
         const html = response.data;
         const $ = cheerio.load(html);

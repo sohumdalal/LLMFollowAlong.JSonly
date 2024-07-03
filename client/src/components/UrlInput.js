@@ -22,6 +22,7 @@ function UrlInput({ onSubmit }) {
       if (response.ok) {
         const data = await response.json();
         // Assuming the backend responds with a message
+        console.log("data came back")
         setResponseMessage(data.message);
         // Callback to App.js to trigger UI transition
         onSubmit();
