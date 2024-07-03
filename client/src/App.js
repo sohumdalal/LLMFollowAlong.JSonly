@@ -20,7 +20,7 @@ function App() {
             console.error('Error deleting index:', response.statusText);
           }
           else {
-            console.log("successful roundtrip post")
+            console.log("successful roundtrip post delete")
           }
         })
         .catch((error) => {
