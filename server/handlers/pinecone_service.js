@@ -1,23 +1,24 @@
-const PineconeClient = require('@pinecone-database/pinecone-client');
+const { Pinecone } = require('@pinecone-database/pinecone');
 const { getEmbedding } = require('./openai_service.js');
 require('dotenv').config();
 
 const PINECONE_API_KEY = process.env.PINECONE_API_KEY;
 const EMBEDDING_DIMENSION = 1536;
 
-const pinecone = new PineconeClient();
-pinecone.init({ apiKey: PINECONE_API_KEY });
+const pc = new Pinecone({
+    apiKey: PINECONE_API_KEY
+});
 
 const embedChunksAndUploadToPinecone = async (chunks, indexName) => {
-    const existingIndexes = await pinecone.listIndexes();
+    const existingIndexes = await pc.listIndexes();
     
     if (existingIndexes.includes(indexName)) {
         console.log("\nIndex already exists. Deleting index ...");
-        await pinecone.deleteIndex({ indexName });
+        await pc.deleteIndex({ indexName });
     }
 
     console.log("\nCreating a new index: ", indexName);
-    await pinecone.createIndex({
+    await pc.createIndex({
         indexName,
         dimension: EMBEDDING_DIMENSION,
         metric: 'cosine',
@@ -26,8 +27,6 @@ const embedChunksAndUploadToPinecone = async (chunks, indexName) => {
         shards: 1
     });
 
-    const index = pinecone.Index(indexName);
-
     console.log("\nEmbedding chunks using OpenAI ...");
     const embeddingsWithIds = await Promise.all(chunks.map(async (chunk, i) => {
         const embedding = await getEmbedding(chunk);
@@ -35,6 +34,7 @@ const embedChunksAndUploadToPinecone = async (chunks, indexName) => {
     }));
 
     console.log("\nUploading chunks to Pinecone ...");
+    const index = pc.Index(indexName);
     await index.upsert({ vectors: embeddingsWithIds });
 
     console.log(`\nUploaded ${chunks.length} chunks to Pinecone index '${indexName}'.`);
@@ -45,7 +45,7 @@ const getMostSimilarChunksForQuery = async (query, indexName) => {
     const questionEmbedding = await getEmbedding(query);
 
     console.log("\nQuerying Pinecone index ...");
-    const index = pinecone.Index(indexName);
+    const index = pc.Index(indexName);
     const queryResults = await index.query({
         vector: questionEmbedding,
         topK: 3,
@@ -57,13 +57,15 @@ const getMostSimilarChunksForQuery = async (query, indexName) => {
 };
 
 const deleteIndex = async (indexName) => {
-    console.log("I am in the delete index function within pinecone");
-    const existingIndexes = await pinecone.listIndexes();
+    console.log("Deleting index: ", indexName);
+    const existingIndexes = await pc.listIndexes();
 
     if (existingIndexes.includes(indexName)) {
-        console.log("conditional met");
-        await pinecone.deleteIndex({ indexName });
-        console.log("index deleted");
+        console.log("Index exists. Deleting ...");
+        await pc.deleteIndex({ indexName });
+        console.log("Index deleted.");
+    } else {
+        console.log("Index not found.");
     }
 };
 
