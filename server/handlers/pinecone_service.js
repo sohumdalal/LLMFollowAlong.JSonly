@@ -58,7 +58,7 @@ const getMostSimilarChunksForQuery = async (query, indexName) => {
 
 const deleteIndex = async (indexName) => {
     console.log("Deleting index: ", indexName);
-    const existingIndexes = await pc.listIndexes();
+    const existingIndexes = await pc.list_indexes()
 
     if (existingIndexes.includes(indexName)) {
         console.log("Index exists. Deleting ...");

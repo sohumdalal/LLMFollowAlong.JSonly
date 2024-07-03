@@ -5,18 +5,12 @@ const EventSource = require('eventsource');
 const openAIService = require('./handlers/openai_service.js');
 const pineconeService = require('./handlers/pinecone_service.js');
 const scrapingService = require('./handlers/scraping_service.js');
-const { chunkText, addCorsHeaders} = require('./helperFunctions.js');
+const { chunkText } = require('./helperFunctions.js');
 
 const app = express();
 const PINECONE_INDEX_NAME = 'index237';
 
 app.use(bodyParser.json());
-
-// Middleware to handle CORS headers
-app.use((req, res, next) => {
-    addCorsHeaders(res);
-    next();
-});
 
 
 // POST /handle-query

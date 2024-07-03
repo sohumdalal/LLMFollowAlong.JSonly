@@ -31,7 +31,7 @@ function ChatInterface() {
 
     // Send the user's message to the server and wait for a response.
     // This response will be streamed to this component.
-    const response = await fetch('/api/handle-query', {
+    const response = await fetch('http://localhost:3000/api/handle-query', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
