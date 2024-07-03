@@ -12,7 +12,7 @@ function App() {
   useEffect(() => {
     // This effect will run when the component is unmounted (page refresh or navigating to a new page)
     return () => {
-      fetch('http://127.0.0.1:5000/delete-index', {
+      fetch('/api/delete-index', {
         method: 'POST',
       })
         .then((response) => {
