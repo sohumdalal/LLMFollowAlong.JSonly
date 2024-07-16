@@ -9,7 +9,7 @@ const { chunkText } = require('./helperFunctions.js');
 const cors = require('cors');
 
 const app = express();
-const PINECONE_INDEX_NAME = 'index237';
+const PINECONE_INDEX_NAME = 'index1995';
 
 app.use(bodyParser.json());
 app.use(cors());
