@@ -6,11 +6,15 @@ const openAIService = require('./handlers/openai_service.js');
 const pineconeService = require('./handlers/pinecone_service.js');
 const scrapingService = require('./handlers/scraping_service.js');
 const { chunkText } = require('./helperFunctions.js');
+const cors = require('cors');
 
 const app = express();
 const PINECONE_INDEX_NAME = 'index237';
 
 app.use(bodyParser.json());
+app.use(cors());
+app.use(express.json());
+
 
 
 // POST /handle-query
@@ -72,7 +76,7 @@ app.post('/api/delete-index', async (req, res) => {
     res.json({ message: `Index ${PINECONE_INDEX_NAME} deleted successfully` });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
